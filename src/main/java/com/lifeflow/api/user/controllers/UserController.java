@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     public Iterable<UserDetailsDto> getAllAUsers(
         @RequestHeader(name = "x-auth-token", required = false) String authToken,
         @RequestParam(required = false, defaultValue = "", name = "sort") String sort
