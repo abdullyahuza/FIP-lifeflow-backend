@@ -1,5 +1,6 @@
 package com.lifeflow.api.user.controllers;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.lifeflow.api.user.dtos.CreateUserRequest;
+import com.lifeflow.api.user.dtos.UpdateUserRequest;
 import com.lifeflow.api.user.dtos.UserDetailsDto;
 import com.lifeflow.api.user.enums.Role;
 import com.lifeflow.api.user.mappers.UserMapper;
@@ -54,10 +58,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDetailsDto> getAUser(@PathVariable Long id) {
+    public ResponseEntity<?> getAUser(@PathVariable Long id) {
         var user = userRepository.findById(id).orElse(null);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                "error", "User Not found",
+                "status", 404,
+                "timestamp", Instant.now()
+            ));
         }
         return ResponseEntity.ok(userMapper.toDto(user));
     }
@@ -77,7 +85,6 @@ public class UserController {
                 .body(Map.of("error", "Only admins can assign admin roles"));
         }
 
-
         var userData = userMapper.toEntity(request);
         userData.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -96,7 +103,36 @@ public class UserController {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         return auth != null && auth.getAuthorities().stream()
             .anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"));
-    }   
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(
+        @RequestBody UpdateUserRequest request,
+        UriComponentsBuilder uriBuilder,
+        @PathVariable Long id
+    ) {
+        var user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                "error", "User Not found",
+                "status", 404,
+                "timestamp", Instant.now()
+            ));
+        }
+        userMapper.update(request, user);
+        userRepository.save(user);
+        return ResponseEntity.ok(userMapper.toDto(user));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        var user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        userRepository.delete(user);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }
