@@ -1,0 +1,4 @@
+INSERT INTO "public"."users" ("id","created_at","updated_at","email","name","password","phone") VALUES 
+(1,'2025-06-27 21:44:18.073399+01','2025-06-27 23:42:48.934575+01','superadmin@lifeflow.com','LifeFlow Superadmin','$2a$10$Ox3bXrYfoY0sxkRAONo4.e6Nj.V6tD.G/5KZiKyuA1QfuY.YdKHme','080xxxxxxxx'),
+(2,'2025-06-27 21:53:57.468226+01','2025-06-27 21:53:57.468233+01','abdullyahuza@gmail.com','Mansoor Tasiu','$2a$10$RsmKRjnZtoWNV45hJyxcu.TMbYCzFiSlIwKnCbv2E92vaLrWT.iGq','08039099210'),
+(5,'2025-06-27 23:02:00.54787+01','2025-06-27 23:02:00.547876+01','mansoortaiu5@gmail.com','Mansoor Tasiu','$2a$10$pcLD2vY9kRnRB/rCLhHZh.D.xlxR9NHEq.RAGH32A/bThb8IE0p/q','08039099210');

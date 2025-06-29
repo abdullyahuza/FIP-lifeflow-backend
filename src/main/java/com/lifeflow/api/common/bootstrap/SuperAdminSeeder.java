@@ -36,6 +36,7 @@ public class SuperAdminSeeder implements CommandLineRunner {
                 .email(props.getEmail())
                 .phone(props.getPhone())
                 .password(passwordEncoder.encode(props.getPassword()))
+                .role("SUPER_ADMIN")
                 .roles(Set.of(Role.ROLE_SUPER_ADMIN))
                 .build();
 

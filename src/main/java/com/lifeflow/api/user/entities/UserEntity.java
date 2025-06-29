@@ -54,6 +54,11 @@ public class UserEntity extends Auditable {
     private String phone;
 
     @NotNull
+    @Column(name = "role", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'DONOR'")
+    private String role;
+
+
+    @NotNull
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -65,13 +70,17 @@ public class UserEntity extends Auditable {
     private Set<Role> roles = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private ProfileEntity profile;
+    private DonorProfileEntity profile;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
     
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    public String getFullName() {
+        return name;
+    }
 
     @Override
     public String toString() {
