@@ -11,6 +11,7 @@ public class UserDetailsDto {
     private String name;
     private String phone;
     private String email;
+    private String role;
     private String createdAt;
     private String updatedAt;
 }
