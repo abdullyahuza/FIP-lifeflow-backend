@@ -11,7 +11,7 @@
 	<groupId>com.lifeflowbackend</groupId>
 	<artifactId>lifeflow-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
+	<name>lifeflow-backend</name>
 	<description>LIFEFLOW API service for Project Showcase (FIP)</description>
 	<url/>
 	<licenses>
